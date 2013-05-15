@@ -1,0 +1,122 @@
+<script xmlns="http://www.w3.org/1999/html">
+    $(function () {
+        //script for popups
+        $('a.show_popup').click(function () {
+            $('div.'+$(this).attr("rel")).fadeIn(500);
+            $("body").append("<div id='overlay'></div>");
+            $('#overlay').show().css({'filter' : 'alpha(opacity=80)'});
+            return false;
+        });
+        $('a.close').click(function () {
+            $(this).parent().fadeOut(100);
+            $('#overlay').remove('#overlay');
+            return false;
+        });
+        $('.btn#btn-popup').click(function () {
+            $(this).parent().parent().fadeOut(100);
+            $('#overlay').remove('#overlay');
+        });
+
+
+
+        //script for tabs
+        $("div.selectTabs").each(function () {
+            var tmp = $(this);
+            $(tmp).find(".lineTabs li").each(function (i) {
+                $(tmp).find(".lineTabs li:eq("+i+") a").click(function(){
+                    var tab_id=i+1;
+                    $(tmp).find(".lineTabs li").removeClass("active");
+                    $(this).parent().addClass("active");
+                    $(tmp).find(".tab_content div").stop(false,false).hide();
+                    $(tmp).find(".tab"+tab_id).stop(false,false).fadeIn(300);
+                    return false;
+                });
+            });
+        });
+    });
+</script>
+
+
+<div id="tj_container" class="tj_container">
+  <h1><%= @image.name %></h1>
+
+    <div class="link_group">
+      <a class="show_popup" rel="sharpen_form" href="#">Sharpen</a> <br>
+      <br>
+      <a class="show_popup" rel="blur_form" href="#">Blur</a>
+      <br>
+      <br>
+      <a class="show_popup" rel="gray_form" href="#">Grayscale</a>
+    </div>
+
+ <!----------image here ----------->
+  <div id="testdiv">
+    <% if @image != nil %>
+        <%= image_tag @image.img.url %>
+    <% else %>
+     <h3>No image sorry!</h3>
+    <% end %>
+    <br>
+  </div>
+ <!------------------------------>
+
+  <!--<div class="filter_nav">-->
+    <!--<%= link_to "Sharpen", action: 'filter', act: 'sharpen', id: @image.id, sigma: '4.0', radius: '0.0', remote: true %>-->
+    <!--<%= link_to "Adaptive", action: 'filter', act: 'adaptive', id: @image.id, remote: true%>-->
+    <!--<%= link_to "Test", action: 'filter',  id: @image.id, remote: true %>-->
+    <!--<%= link_to "Adaptive", action: 'filter', act: 'adaptive', id: @image.id, remote: true %>-->
+  <!--</div>-->
+
+
+
+
+  <div class="popup sharpen_form">
+    <a class="close" href="#">Close</a>
+    <h2>Sharpen:</h2>
+    <%= form_tag({controller: 'images', action: 'filter'}, remote: true) do%>
+        <%= label_tag :radius, "Radius" %>
+        <%= text_field_tag :radius %>
+
+        <%= hidden_field_tag :id, @image.id %>
+        <%= hidden_field_tag :act, 'sharpen' %>
+
+        <%= label_tag :sigma, "Sigma" %>
+        <%= text_field_tag :sigma %>
+        <br>
+        <%= submit_tag "OK" , class: 'btn', id: 'btn-popup'%>
+    <% end %>
+  </div>
+
+  <div class="popup blur_form">
+    <a class="close" href="#">Close</a>
+    <h2>Blur:</h2>
+    <p> We convolve the image with a Gaussian operator of the given radius and standard deviation (sigma).</p>
+    <%= form_tag({controller: 'images', action: 'filter'}, remote: true) do%>
+        <%= label_tag :radius, "Radius" %>
+        <%= text_field_tag :radius %>
+
+        <%= hidden_field_tag :id, @image.id %>
+        <%= hidden_field_tag :act, 'blur' %>
+
+        <%= label_tag :sigma, "Sigma" %>
+        <%= text_field_tag :sigma %>
+        <br>
+        <%= submit_tag "OK" , class: 'btn', id: 'btn-popup'%>
+    <% end %>
+  </div>
+
+  <div class="popup gray_form">
+    <a class="close" href="#">Close</a>
+    <h2>Grayscale:</h2>
+    <%= form_tag({controller: 'images', action: 'gray'}, remote: true) do%>
+        <%= label_tag :power, "Power" %>
+        <%= text_field_tag :power %>
+
+        <%= hidden_field_tag :id, @image.id %>
+        <%= hidden_field_tag :act, 'gray' %>
+        <br>
+        <%= submit_tag "OK" , class: 'btn', id: 'btn-popup'%>
+    <% end %>
+  </div>
+
+</div>

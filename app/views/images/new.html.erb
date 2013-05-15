@@ -1,0 +1,15 @@
+<div id="tj_container" class="tj_container">
+<%= form_for :img, :url => { :action => :create }, :html => { :multipart => true } do |f| %>
+
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+    <br>
+    <%= f.label :description %>
+    <%= f.text_area :description, placeholder: "#water, #summer ..." %></br>
+    <br>
+    <%= f.label :img %>
+    <%= f.file_field :img , style: "width: 190px" %></br>
+    <br>
+    <%= f.submit 'Add', class: "btn btn-warning btn-large" %>
+<% end %>
+</div>

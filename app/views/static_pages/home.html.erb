@@ -1,0 +1,53 @@
+<script type="text/javascript">
+    $(function() {
+        $('#tj_container').gridnav({
+            type	: {
+                mode		: 'seqfade', 	// use def | fade | seqfade | updown | sequpdown | showhide | disperse | rows
+                speed		: 500,			// for fade, seqfade, updown, sequpdown, showhide, disperse, rows
+                easing		: '',			// for fade, seqfade, updown, sequpdown, showhide, disperse, rows
+                factor		: 100,			// for seqfade, sequpdown, rows
+                reverse		: ''			// for sequpdown
+            }
+        });
+    });
+</script>
+
+
+
+
+    <div id="tj_container" class="tj_container">
+
+      <div class="tj_nav">
+        <span id="tj_prev" class="tj_prev">Previous</span>
+        <span id="tj_next" class="tj_next">Next</span>
+      </div>
+
+      <div class="tj_wrapper">
+        <ul class="tj_gallery">
+          <!--<li><a href="#"><img src="assets/1.jpg" alt="image01" /></a></li>
+            <li><a href="#"><img src="assets/2.jpg" alt="image02" /></a></li>
+            <li><a href="#"><img src="assets/3.jpg" alt="image03" /></a></li>
+            <li><a href="#"><img src="assets/4.jpg" alt="image04" /></a></li>
+            <li><a href="#"><img src="assets/5.jpg" alt="image05" /></a></li>
+            <li><a href="#"><img src="assets/6.jpg" alt="image06" /></a></li>
+            <li><a href="#"><img src="assets/7.jpg" alt="image07" /></a></li>
+            <li><a href="#"><img src="assets/8.jpg" alt="image08" /></a></li>
+            <li><a href="#"><img src="assets/9.jpg" alt="image09" /></a></li>
+            <li><a href="#"><img src="assets/10.jpg" alt="image10" /></a></li>
+            <li><a href="#"><img src="assets/11.jpg" alt="image11" /></a></li>
+            <li><a href="#"><img src="assets/12.jpg" alt="image12" /></a></li>
+            <li><a href="#"><img src="assets/13.jpg" alt="image13" /></a></li>
+            <li><a href="#"><img src="assets/14.jpg" alt="image14" /></a></li>
+            <li><a href="#"><img src="assets/15.jpg" alt="image15" /></a></li>
+            <li><a href="#"><img src="assets/16.jpg" alt="image16" /></a></li>
+            <li><a href="#"><img src="assets/17.jpg" alt="image17" /></a></li>
+            <li><a href="#"><img src="assets/18.jpg" alt="image18" /></a></li>
+            <li><a href="#"><img src="assets/19.jpg" alt="image19" /></a></li>
+            <li><a href="#"><img src="assets/20.jpg" alt="image20" /></a></li>   -->
+            <%= render @images %>
+        </ul>
+      </div>
+    </div>
+    <div class="button-upload" >
+      <%= link_to "New Image", new_image_path, class: "btn btn-warning btn-large" %>
+    </div>
