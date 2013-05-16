@@ -11,6 +11,10 @@ Img::Application.routes.draw do
 
   get 'images/convolution'
 
+
+  get 'images/conv'
+  post 'images/conv'
+
   post 'images/convolution'
   post 'images/gray'
   post 'images/blur'

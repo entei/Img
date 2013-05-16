@@ -43,7 +43,7 @@ class ImagesController < ApplicationController
                        :type => 'image/jpg')
   end
 
-  def convolution
+  def conv
     path = Image.find(params[:id]).img.path
     im = Magick::Image::read(path)[0]
 
@@ -53,11 +53,11 @@ class ImagesController < ApplicationController
     div = 1
     offset = 0
     #'Soft blur'
-    kernel = [[0.0, 0.2,  0.0], [0.2, 0.2,  0.2],[0.0, 0.2,  0.0]]
+   # kernel = [[0.0, 0.2,  0.0], [0.2, 0.2,  0.2],[0.0, 0.2,  0.0]]
     #'Negative'
     #kernel =[[0,0,0],[0,-1,0],[0,0,0,]]
     #'Emboss'
-    #kernel = [[-2.0, -1.0, 0.0],  [-1.0, 1.0, 1.0],  [0.0, 1.0, 2.0]]
+    kernel = [[-2.0, -1.0, 0.0],  [-1.0, 1.0, 1.0],  [0.0, 1.0, 2.0]]
     #'Sharpen'
     #kernel = [[-1.0, -1.0, -1.0], [-1.0, 9.0, -1.0], [-1.0, -1.0, -1.0]]
     #'Blur'
@@ -85,13 +85,14 @@ class ImagesController < ApplicationController
           end
         end
         #p "r: #{r.to_i} g: #{g.to_i} b: #{b.to_i}"
-      #  newpix = Pixel.new(luma((r/div + offset) ), luma(g/div + offset), luma(b/div + offset))
-        im.pixel_color(x, y, 'white')
+       newpix = Magick::Pixel.new((r/div + offset), (g/div + offset), (b/div + offset))
+        p newpix
+        im.pixel_color(x, y, newpix)
       end
     end
-   im.write('result.jpg')
-    #send_data(im.to_blob, :disposition => 'inline',
-     #         :type => 'image/jpg')
+  # im.write('/home/expsk/resultRails.jpg')
+    send_data(im.to_blob, :disposition => 'inline',
+             :type => 'image/jpg')
   end
 
   def luma(value)
