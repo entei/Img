@@ -43,22 +43,23 @@ class ImagesController < ApplicationController
                        :type => 'image/jpg')
   end
 
-  def convolute(kernel, im)
-    @width = im.rows
-    @height = im.columns
+  def convolution
+    path = Image.find(params[:id]).img.path
+    im = Magick::Image::read(path)[0]
 
-    #newimg = Image.new(@width, @height)
+    @width = im.columns
+    @height = im.rows
 
-    #	p newimg
-
+    div = 1
+    offset = 0
+    #'Soft blur'
+    kernel = [[0.0, 0.2,  0.0], [0.2, 0.2,  0.2],[0.0, 0.2,  0.0]]
     #'Negative'
-    kernel =[[0,0,0],[0,-1,0],[0,0,0,]]
+    #kernel =[[0,0,0],[0,-1,0],[0,0,0,]]
     #'Emboss'
     #kernel = [[-2.0, -1.0, 0.0],  [-1.0, 1.0, 1.0],  [0.0, 1.0, 2.0]]
-
     #'Sharpen'
     #kernel = [[-1.0, -1.0, -1.0], [-1.0, 9.0, -1.0], [-1.0, -1.0, -1.0]]
-
     #'Blur'
     #kernel = [[0.1111,0.1111,0.1111],[0.1111,0.1111,0.1111],[0.1111,0.1111,0.1111]]
 
@@ -84,12 +85,13 @@ class ImagesController < ApplicationController
           end
         end
         #p "r: #{r.to_i} g: #{g.to_i} b: #{b.to_i}"
-        newpix = Pixel.new(luma(r), luma(g), luma(b))
-        im.pixel_color(x, y, newpix)
-
+      #  newpix = Pixel.new(luma((r/div + offset) ), luma(g/div + offset), luma(b/div + offset))
+        im.pixel_color(x, y, 'white')
       end
     end
-    im.write('/result.jpg')
+   im.write('result.jpg')
+    #send_data(im.to_blob, :disposition => 'inline',
+     #         :type => 'image/jpg')
   end
 
   def luma(value)
@@ -173,6 +175,11 @@ class ImagesController < ApplicationController
 
     send_data(img.to_blob, :disposition => 'inline',
               :type => 'image/jpg')
+  end
+
+  def median
+    path = Image.find(params[:id]).img.path
+    im = Magick::Image::read(path)[0]
   end
 
 end

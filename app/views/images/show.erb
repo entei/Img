@@ -41,6 +41,8 @@
   <h1><%= @image.name %></h1>
 
     <div class="link_group">
+      <a class="show_popup" rel="convolution_form" href="#">Convolution</a> <br>
+      <br>
       <a class="show_popup" rel="sharpen_form" href="#">Sharpen</a> <br>
       <br>
       <a class="show_popup" rel="blur_form" href="#">Blur</a>
@@ -68,19 +70,34 @@
   <!--</div>-->
 
 
+  <div class="popup convolution_form">
+    <a class="close" href="#">Close</a>
+    <h2>Convolution:</h2>
+    <%= form_tag({controller: 'images', action: 'convolution'}, remote: true) do%>
 
+        <%= hidden_field_tag :radius %>
+
+        <%= hidden_field_tag :id, @image.id %>
+        <%= hidden_field_tag :act, 'convolution' %>
+
+        <%= label_tag :sigma, "Power" %>
+        <%= text_field_tag :sigma %>
+        <br>
+        <%= submit_tag "OK" , class: 'btn', id: 'btn-popup'%>
+    <% end %>
+  </div>
 
   <div class="popup sharpen_form">
     <a class="close" href="#">Close</a>
     <h2>Sharpen:</h2>
     <%= form_tag({controller: 'images', action: 'filter'}, remote: true) do%>
-        <%= label_tag :radius, "Radius" %>
-        <%= text_field_tag :radius %>
+
+        <%= hidden_field_tag :radius %>
 
         <%= hidden_field_tag :id, @image.id %>
         <%= hidden_field_tag :act, 'sharpen' %>
 
-        <%= label_tag :sigma, "Sigma" %>
+        <%= label_tag :sigma, "Power" %>
         <%= text_field_tag :sigma %>
         <br>
         <%= submit_tag "OK" , class: 'btn', id: 'btn-popup'%>
@@ -90,15 +107,15 @@
   <div class="popup blur_form">
     <a class="close" href="#">Close</a>
     <h2>Blur:</h2>
-    <p> We convolve the image with a Gaussian operator of the given radius and standard deviation (sigma).</p>
+    <p> We convolve the image with a Gaussian operator of the given standard deviation (sigma).</p>
     <%= form_tag({controller: 'images', action: 'filter'}, remote: true) do%>
-        <%= label_tag :radius, "Radius" %>
-        <%= text_field_tag :radius %>
+
+        <%= hidden_field_tag :radius %>
 
         <%= hidden_field_tag :id, @image.id %>
         <%= hidden_field_tag :act, 'blur' %>
 
-        <%= label_tag :sigma, "Sigma" %>
+        <%= label_tag :sigma, "Power" %>
         <%= text_field_tag :sigma %>
         <br>
         <%= submit_tag "OK" , class: 'btn', id: 'btn-popup'%>

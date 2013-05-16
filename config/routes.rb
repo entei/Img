@@ -8,6 +8,10 @@ Img::Application.routes.draw do
   get 'images/blur'
   get 'images/gray'
 
+
+  get 'images/convolution'
+
+  post 'images/convolution'
   post 'images/gray'
   post 'images/blur'
   post 'images/filter'
