@@ -1,0 +1,323 @@
+
+<script>
+    $(function () {
+        //script for popups
+        $('a.show_popup').click(function () {
+            $('div.'+$(this).attr("rel")).fadeIn(700);
+            $("body").append("<div id='overlay'></div>");
+            $('#overlay').show().css({'filter' : 'alpha(opacity=80)'});
+            return false;
+        });
+        $('a.close').click(function () {
+            $(this).parent().fadeOut(100);
+            $('#overlay').remove('#overlay');
+            return false;
+        });
+
+        $('.btn#btn-blur').click(function () {
+
+            $(this).parent().fadeOut(100);
+            $('#overlay').remove('#overlay');
+            var set_blr = document.getElementById('sel_blur');
+            var c = set_blr.options[set_blr.selectedIndex].value;
+
+             switch(c)
+             {
+                 case '1':
+                         //light blur
+                     transformador.convolve([[1,1,0],[1,1,0],[0,0,0]], 4, 0);
+                     break
+                 case '2':
+                         //blur
+                     transformador.convolve([[1,1,1],[1,1,1],[1,1,1]], 9, 0);
+                     break
+                 case '3':
+                         //gaussian
+                     transformador.convolve([[1,2,1],[2, 4, 2],[1, 2, 1]], 16, 0);
+                     break
+                 default:
+                     alert('Error');
+
+             }
+
+            return false;
+        });
+
+        $('.btn#btn-sharpen').click(function () {
+
+            $(this).parent().fadeOut(100);
+            $('#overlay').remove('#overlay');
+            var set_sh = document.getElementById('sel_sharpen');
+            var c = set_sh.options[set_sh.selectedIndex].value;
+
+            switch(c)
+            {
+
+                case '1':
+                    //light sharpen
+                    transformador.convolve([[-1,0,0],[0,2,0],[0,0,0]], 1, 0);
+                    break
+                case '2':
+                    //sharpen
+                    transformador.convolve([[0,-1,0],[-1,5,-1],[0,-1,0]], 1, 0);
+                    break
+                case '3':
+                    //max sharpen
+                    transformador.convolve([[-1,-1,-1],[-1, 9, -1],[-1, -1, -1]], 1, 0);
+                    break
+                default:
+                    alert('Error');
+
+            }
+
+            return false;
+        });
+
+        $('.btn#btn-custom').click(function(){
+            $(this).parent().fadeOut(100);
+            $('#overlay').remove('#overlay');
+             var inputs = document.getElementsByTagName('input');
+
+                var matr = [[inputs[0].value, inputs[1].value, inputs[2].value],
+                            [inputs[3].value, inputs[4].value, inputs[5].value],
+                            [inputs[6].value, inputs[7].value, inputs[8].value]];
+
+            var d = parseInt(inputs[9].value);
+            var offs = parseInt(inputs[10].value);
+
+           transformador.convolve(matr, d, offs);
+
+            return false;
+        });
+        //script for tabs
+        $("div.selectTabs").each(function () {
+            var tmp = $(this);
+            $(tmp).find(".lineTabs li").each(function (i) {
+                $(tmp).find(".lineTabs li:eq("+i+") a").click(function(){
+                    var tab_id=i+1;
+                    $(tmp).find(".lineTabs li").removeClass("active");
+                    $(this).parent().addClass("active");
+                    $(tmp).find(".tab_content div").stop(false,false).hide();
+                    $(tmp).find(".tab"+tab_id).stop(false,false).fadeIn(300);
+                    return false;
+                });
+            });
+        });
+    });
+</script>
+
+
+<div id="tj_container" class="tj_container">
+  <h1 style="text-shadow: 2px 4px 3px rgba(0,0,0,0.3);"><%= @image.name %></h1>
+
+    <div class="link_group">
+      <a href="#" id="reset">Reset</a> <br>
+      </br>
+      <a href="#" id="negative">Negative</a> <br>
+      </br>
+      <!--</br>-->
+      <a href="#" id="emboss">Emboss</a> <br>
+      </br>
+      <!--<a class="show_popup" rel="sharpen_form" href="#">Sharpen</a> <br>-->
+      <!--</br>-->
+      <!--<a class="show_popup" rel="convolution_form" id="button" href="#">Convolution</a> <br>-->
+      <!--</br>-->
+      <a class="show_popup" rel="sharpen_form" href="#">Sharpen</a> <br>
+      </br>
+      <a class="show_popup" rel="blur_form" href="#">Blur</a> <br>
+     </br>
+      <a class="show_popup" rel="custom_form" href="#">Custom</a> <br>
+      </br>
+    </div>
+
+  <canvas id="canvas">Обновите ваш браузер!</canvas>
+
+  <script>
+      function CanvasImage(canvas, src) {
+          // load image in canvas
+       //   var canv = document.getElementById('canvas');
+          var context = canvas.getContext('2d');
+          var i = new Image();
+          var that = this;
+          i.src = src;
+          i.onload = function(){
+              canvas.width = i.width;
+              canvas.height = i.height;
+              context.drawImage(i, 0, 0, i.width, i.height);
+
+              // remember the original pixels
+              that.original = that.getData();
+          };
+          // cache these
+          this.context = context;
+          this.image = i;
+      };
+
+      CanvasImage.prototype.getData = function() {
+          return this.context.getImageData(0, 0, this.image.width, this.image.height);
+      };
+
+      CanvasImage.prototype.setData = function(data) {
+          return this.context.putImageData(data, 0, 0);
+      };
+
+      CanvasImage.prototype.reset = function() {
+          this.setData(this.original);
+      }
+
+      CanvasImage.prototype.convolve = function(matrix, divisor, offset) {
+          var m = [].concat(matrix[0], matrix[1], matrix[2]); // flatten
+          if (!divisor) {
+              divisor = m.reduce(function(a, b) {return a + b;}) || 1; // sum
+          }
+          var olddata = this.original;
+          var oldpx = olddata.data;
+          var newdata = this.context.createImageData(olddata);
+          var newpx = newdata.data
+          var len = newpx.length;
+          var res = 0;
+          var w = this.image.width;
+          for (var i = 0; i < len; i++) {
+              if ((i + 1) % 4 === 0) {
+                  newpx[i] = oldpx[i];
+                  continue;
+              }
+              res = 0;
+              var these = [
+                  oldpx[i - w * 4 - 4] || oldpx[i],
+                  oldpx[i - w * 4]     || oldpx[i],
+                  oldpx[i - w * 4 + 4] || oldpx[i],
+                  oldpx[i - 4]         || oldpx[i],
+                  oldpx[i],
+                  oldpx[i + 4]         || oldpx[i],
+                  oldpx[i + w * 4 - 4] || oldpx[i],
+                  oldpx[i + w * 4]     || oldpx[i],
+                  oldpx[i + w * 4 + 4] || oldpx[i]
+              ];
+              for (var j = 0; j < 9; j++) {
+                  res += these[j] * m[j];
+              }
+              res /= divisor;
+              if (offset) {
+                  res += offset;
+              }
+              newpx[i] = res;
+          }
+          this.setData(newdata);
+      };
+
+      var canvas = document.getElementById('canvas');
+
+      var transformador = new CanvasImage(
+              canvas,
+              '<%= @image.img.url %>'
+      );
+
+      var negative =  [[0 ,0, 0],[ 0, -1, 0],[ 0, 0, 0]];
+      //matrices.forEach(function(m) {
+      var b = document.getElementById("negative");
+      b.onclick = function() {
+          transformador.convolve(negative, 1, 256);
+
+      };
+
+      //b.onclick = function() {
+      //   transformador.convolve(m.data, m.divisor, m.offset);
+      // };
+
+  </script>
+
+<!-- buttons click listener-->
+  <script>
+      $("#reset").click(function(){
+          transformador.reset();
+      });
+      $("#blur").click(function(){
+          transformador.convolve([[1,1,1],[1,1,1],[1,1,1]], 9, 0);
+       });
+      $("#gaussian-blur").click(function(){
+          transformador.convolve([[1,2,1],[2, 4, 2],[1, 2, 1]], 16, 0);
+      })
+      $("#light-blur").click(function(){
+          transformador.convolve([[1,1,0],[1,1,0],[0,0,0]], 4, 0);
+      });
+
+      $("#sharpen").click(function(){
+          transformador.convolve([[0,-1,0],[-1,5,-1],[0,-1,0]], 1, 0);
+      });
+      $("#max-sharpen").click(function(){
+          transformador.convolve([[-1,-1,-1],[-1, 9, -1],[-1, -1, -1]], 1, 0);
+      });
+      $("#light-sharpen").click(function(){
+          transformador.convolve([[-1,0,0],[0,2,0],[0,0,0]], 1, 0);
+      });
+
+      $("#emboss").click(function(){
+          transformador.convolve([[-2,-1,0],[-1,1,1],[0,1,2]], 1, 0);
+      });
+      $("#light-emboss").click(function(){
+          transformador.convolve([[1,0,0],[0,1,0],[0,0,-1]], 1, 0);
+      });
+   </script>
+
+  <!--<div class="filter_nav">-->
+    <!--<%= link_to "Sharpen", action: 'filter', act: 'sharpen', id: @image.id, sigma: '4.0', radius: '0.0', remote: true %>-->
+    <!--<%= link_to "Adaptive", action: 'filter', act: 'adaptive', id: @image.id, remote: true%>-->
+    <!--<%= link_to "Test", action: 'filter',  id: @image.id, remote: true %>-->
+    <!--<%= link_to "Adaptive", action: 'filter', act: 'adaptive', id: @image.id, remote: true %>-->
+  <!--</div>-->
+
+
+  <div class="popup blur_form">
+    <a class="close" href="#">Close</a>
+    <h2>Choice blur filter</h2>
+    <select class="sel" id="sel_blur" >
+      <option value="1">Light blur</option>
+      <option value="2">Blur</option>
+      <option value="3">Gaussian blur</option>
+    </select>
+    <button class="btn" id="btn-blur" style="float:right;" >OK!</button>
+  </div>
+
+  <div class="popup sharpen_form">
+    <a class="close" href="#">Close</a>
+    <h2>Choice sharpen filter</h2>
+    <select class="sel" id="sel_sharpen" >
+      <option value="1">Light sharpen</option>
+      <option value="2">Sharpen</option>
+      <option value="3">Max sharpen</option>
+    </select>
+    <button class="btn" id="btn-sharpen" style="float:right;">OK!</button>
+  </div>
+
+  <div class="popup custom_form">
+    <a class="close" href="#">Close</a>
+    <h2>Fill out a form</h2>
+
+       <form>
+         <input type="number"  value="0"/>
+
+         <input type="number" value="0"/>
+
+         <input type="number" value="0"/>
+         </br>
+
+         <input type="number" value="0"/>
+         <input type="number" value="0"/>
+         <input type="number" value="0"/>
+         </br>
+         <input type="number" value="0"/>
+         <input type="number" value="0"/>
+         <input type="number" value="0"/>
+         </br>
+          <label>Div</label>
+         <input type="number" min="1" id="div" value="1">
+         <label>Offset</label>
+         <input type="number" id="offset" value="0">
+       </form>
+
+    <button class="btn" id="btn-custom" style="float:right;">OK!</button>
+  </div>
+
+</div>
+
