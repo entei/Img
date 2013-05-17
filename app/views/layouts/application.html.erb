@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 <head>
   <title>Img</title>
@@ -7,20 +6,19 @@
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
 </head>
-<body>
-<%= render 'layouts/header' %>
-</body>
-<div class="container">
-  <div class="header">
 
+<body>
+
+  <div class="header">
     <h1>IMAGE FILTERING<span>via convolution</span></h1>
     <h2><%=@tip%></h2>
-
-    <%= yield %>
-
-
   </div>
+
+  <div class="container">
+    <%= render 'layouts/header' %>
+    <%= yield %>
 
 </div>
 
+</body>
 </html>

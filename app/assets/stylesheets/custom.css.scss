@@ -5,6 +5,12 @@
   text-align: center;
 }
 
+.footer {
+ // position: relative;
+
+}
+
+
 .brand {
   text-decoration-color: #ffffff;
 }
@@ -18,7 +24,12 @@ textarea {
 #testdiv {
 //  text-align:center;
  // display:block;
+  width: 500px;
+}
 
+#canvas {
+  //  text-align:center;
+  // display:block;
   width: 500px;
 }
 
@@ -78,8 +89,6 @@ abbr,acronym { border:0;
 /*end reset*/
 
 
-
-
 html, body {
   margin: 0;
   padding: 0;
@@ -91,9 +100,6 @@ body {
   color:#333;
   background-color:#fff;
 }
-
-
-
 
 /**********popup links**********/
 .link_group {
@@ -216,35 +222,27 @@ body {
   *zoom:1;
 }
 
-.sharpen_form input[type=text], .reg_form input[type=password] {
-  margin-bottom:10px;
-  padding:0 3px;
-  width:274px;
-  height:22px;
-  font:bold 12px/26px Arial, san-serif;
-  border:1px solid #ccc;
+/***********popup custom**********/
+.custom_form {
+  margin-left:-200px;
+  width:285px;
 }
-.sharpen_form input[type=submit] {
-  margin:10px 15px 0 0;
-  padding:3px 10px;
-  float:right;
-  background:#ccc;
-  border:0;
-  -moz-border-radius:3px;
-  -webkit-border-radius:3px;
-  border-radius:3px;
-  font:bold 10px Arial, san-serif;
-  text-transform:uppercase;
-  position:relative;
-  cursor:pointer;
-  behavior: url(PIE.htc);
-}
-.sharpen_form input[type=submit]:hover {
-  color:#fff;
+.custom_form form {
+  margin-top:10px;
 }
 
+.custom_form input[type=number] {
+  text-align: center;
+ // margin-bottom:10px;
+ // padding:0 3px;
+  width:50px;
+  margin-left: 10px;
+  height:30px;
+//  font:bold 12px/26px Arial, san-serif;
+//  border:1px solid #ccc;
+}
 
-/**********popup with gray**********/
+/**********popup with blur**********/
 .blur_form {
   margin-left:-200px;
   width:285px;

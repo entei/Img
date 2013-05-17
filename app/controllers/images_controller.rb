@@ -5,7 +5,7 @@ class ImagesController < ApplicationController
 
   def new
     @image = Image.new
-    @tip = "Choice image and fill form"
+    @tip = "Choice image and fill out a form"
   end
 
   def show
@@ -51,18 +51,18 @@ class ImagesController < ApplicationController
     @height = im.rows
 
     div = 1
-    offset = 0
+    offset = 256
     #'Soft blur'
    # kernel = [[0.0, 0.2,  0.0], [0.2, 0.2,  0.2],[0.0, 0.2,  0.0]]
     #'Negative'
     #kernel =[[0,0,0],[0,-1,0],[0,0,0,]]
     #'Emboss'
-    kernel = [[-2.0, -1.0, 0.0],  [-1.0, 1.0, 1.0],  [0.0, 1.0, 2.0]]
+    #kernel = [[-2.0, -1.0, 0.0],  [-1.0, 1.0, 1.0],  [0.0, 1.0, 2.0]]
     #'Sharpen'
     #kernel = [[-1.0, -1.0, -1.0], [-1.0, 9.0, -1.0], [-1.0, -1.0, -1.0]]
     #'Blur'
     #kernel = [[0.1111,0.1111,0.1111],[0.1111,0.1111,0.1111],[0.1111,0.1111,0.1111]]
-
+      kernel = [[0,-1,0],[-1,5,-1],[0,-1,0]]
     @width.times do |x|
       @height.times do |y|
 
@@ -132,32 +132,7 @@ class ImagesController < ApplicationController
     send_data(im.to_blob, :disposition => 'inline',
               :type => 'image/jpg')
   end
-  def polaroid(image)
-    image.border!(18, 18, "#f0f0ff")
-    # Bend the image
-    image.background_color = "none"
 
-    amplitude = image.columns * 0.01        # vary according to taste
-    wavelength = image.rows  * 2
-
-    image.rotate!(90)
-    image = image.wave(amplitude, wavelength)
-    image.rotate!(-90)
-
-# Make the shadow
-    shadow = image.flop
-    shadow = shadow.colorize(1, 1, 1, "gray75")     # shadow color can vary to taste
-    shadow.background_color = "white"       # was "none"
-    shadow.border!(10, 10, "white")
-    shadow = shadow.blur_image(0, 3)        # shadow blurriness can vary according to taste
-
-# Composite image over shadow. The y-axis adjustment can vary according to taste.
-    image = shadow.composite(image, -amplitude/2, 5, Magick::OverCompositeOp)
-
-    image.rotate!(-5)                       # vary according to taste
-    image.trim!
-    image
-  end
 
   def gray
     path = Image.find(params[:id]).img.path
