@@ -5,8 +5,16 @@
   text-align: center;
 }
 
-.footer {
- // position: relative;
+footer {
+  position: relative;
+    bottom: 0;
+    display: block
+}
+#footer{
+    Position: absolute;
+    Width: 100%;
+    Bottom: 0;
+    Height: 75px;  /* This value is the height of your footer */
 }
 
 
@@ -24,7 +32,7 @@ textarea {
   width: 500px;
 }
 
-#canvas {
+canvas{
   width: 500px;
 }
 
@@ -216,23 +224,6 @@ body {
   *display:inline;
   *zoom:1;
 }
-
-/***********popup custom**********/
-.custom_form {
-  margin-left:-200px;
-  width:285px;
-}
-.custom_form form {
-  margin-top:10px;
-}
-
-.custom_form input[type=number] {
-  text-align: center;
-  width:50px;
-  margin-left: 10px;
-
-}
-
 /**********popup with blur**********/
 .blur_form {
   margin-left:-200px;
@@ -276,6 +267,28 @@ body {
 }
 .blur_form input[type=submit]:hover {
   color:#fff;
+}
+
+/**popup with custom**********/
+
+/***********popup custom**********/
+.custom_form {
+    margin-left:-200px;
+    width:285px;
+}
+
+.custom_form form {
+    margin-top:10px;
+}
+
+.custom_form input{
+    margin-bottom:10px;
+    padding:0 3px;
+
+    font:bold 12px/26px Arial, san-serif;
+    width: 50px;
+    height: 30px;
+    margin-left: 10px;
 }
 
 /**********popup with pictures**********/

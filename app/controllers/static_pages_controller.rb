@@ -5,4 +5,12 @@ class StaticPagesController < ApplicationController
     @tip = "Select or upload image"
   end
 
+  def contact
+    @tip = "Contact us"
+  end
+
+  def about
+    @tip = "About image filter"
+  end
+
 end

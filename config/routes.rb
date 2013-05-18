@@ -23,8 +23,8 @@ Img::Application.routes.draw do
 
   get 'home' => "Static_pages#home"
   root to: 'static_pages#home'
-    get 'about' => "Static_pages#about"
-
+  get 'about' => "Static_pages#about"
+  get 'contact' => "Static_pages#contact"
   resources :images
 
 

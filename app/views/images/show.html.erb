@@ -130,13 +130,14 @@
       </br>
     </div>
 
-  <canvas style="width: 500px;" id="canvas">Обновите ваш браузер!</canvas>
+  <canvas style="width: 500px;padding-bottom: 50px;" id="canvas">Обновите ваш браузер!</canvas>
 
   <script>
       function CanvasImage(canvas, src) {
           // load image in canvas
        //   var canv = document.getElementById('canvas');
           var context = canvas.getContext('2d');
+
           var i = new Image();
           var that = this;
           i.src = src;
@@ -294,7 +295,7 @@
     <a class="close" href="#">Close</a>
     <h2>Fill out a form</h2>
 
-       <form>
+       <form id="custom">
          <input style="width: 50px;" type="number"  value="0"/>
 
          <input style="width: 50px;" type="number" value="0"/>
