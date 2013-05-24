@@ -246,7 +246,7 @@
       $("#sharpen").click(function(){
           transformador.convolve([[0,-1,0],[-1,5,-1],[0,-1,0]], 1, 0);
       });
-      $("#max-sharpen").click(function(){
+      $("#strong-sharpen").click(function(){
           transformador.convolve([[-1,-1,-1],[-1, 9, -1],[-1, -1, -1]], 1, 0);
       });
       $("#light-sharpen").click(function(){

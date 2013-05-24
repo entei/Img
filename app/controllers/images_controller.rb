@@ -1,4 +1,3 @@
-require 'RMagick'
 require 'rubygems'
 
 class ImagesController < ApplicationController

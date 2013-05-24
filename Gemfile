@@ -13,7 +13,7 @@ group :production do
 end
 
 gem 'paperclip'
-gem "rmagick", "~> 2.13.1"
+#gem "rmagick", "~> 2.13.1"
 gem 'bootstrap-sass', '2.1'
 
 # Gems used only for assets and not required
